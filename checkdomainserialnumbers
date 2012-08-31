@@ -1,0 +1,27 @@
+    #!/bin/bash
+    # Linux shell script to check BIND named domain serial numbers across name servers
+    # This script uses dig to retreive DNS information, make sure it is installed, apt-get install netutils
+    # Tested on RHEL, Fedora, Centos and Debian Linux
+    # -------------------------------------------------------------------------
+    # Copyright (c) 2010 Myles McNamara <get@smyl.es>
+    # This script is licensed under GNU GPL version 2.0 or above
+    # -------------------------------------------------------------------------
+    # Last updated on : March-2009.
+    # -------------------------------------------------------------------------
+
+    # opt=`getopt $*`
+    #
+
+    # Check for domain 
+    [ $# -le 1 ] && { echo "Usage: $0 nameserver1 nameserver2 domain"; exit 1; }
+
+    # Get serial numbers using dig and the specific DNS servers
+    Sl=$(dig @$1 $3 +nssearch | cut -d' ' -f4)
+    S2=$(dig @$2 $3 +nssearch | cut -d' ' -f4)
+echo $S1 $S2
+    # Compare serial numbers
+    if(($S1==$S2)); then
+    echo "Serial numbers match, the DNS records are the same."
+    fi
+    echo "The DNS records are NOT the same."
+

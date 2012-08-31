@@ -1,0 +1,23 @@
+!/usr/bin/env bash
+#
+# Parse geoip (screen scrape)
+#
+# Author: Dave Eddy
+
+# require at least one arg
+[[ -z $1 ]] && { echo "Usage: $0 <ip_or_url> ..." >&2; exit 1; }
+
+data=('Host Name:' 'IP Address:' 'Country:' 'Country code:'
+'Region:' 'City:' 'Postal code:' 'Calling code:' 'Longitude:' 'Latitude:')
+
+# read through the command line args and geoip each one
+for arg in "$@"; do
+        echo "----- $arg -----"
+        # get the html for the url specified
+        html=$(curl --silent --get --data "IP=$arg" "http://www.geoiptool.com/en/" | sed -e 's/<[^>]*>//g' -e 's/^[\t ]*//')
+        for element in "${data[@]}"; do
+                grep -A1 "^$element" <<< "$html" | tr '\n' ' '
+                echo
+        done
+done
+
