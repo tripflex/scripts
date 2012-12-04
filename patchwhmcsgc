@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# WHMCS 5.1 Google Checkout Module Patch
+# This script will download and patch the Google Checkout module for WHMCS versions 5.1
+# Additional Features to come soon ...
+
+# Copyright (c) 2012 Myles McNamara <get@smyl.es>
+#  This script is licensed under GNU GPL version 3.0 or above
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# -------------------------------------------------------------------------
+# Last updated on : 12/04/2012
+# -------------------------------------------------------------------------
+
+
+# ZIPFILEPATH is the path to download the patch, zip format
+ZIPFILEPATH="http://www.whmcs.com/members/dl.php?type=d&id=154"
+# ZIPFILE is the full name of the ZIP file
+ZIPFILE="whmcs_v513_patch.zip"
+# ZIPMD5 is the MD5 of the ZIP file, skip md5 check with -s flag (not implimented yet)
+ZIPMD5="68f3104d01b0c55ee1f938b09564bb7b"
+LASTMODIFIED="12.04.2012"
+
+# Functions
+function line {
+    echo "=----------------------------------------------------------------------------="
+}
+function enter {
+    read -p "Press [enter] to continue ..."
+}
+clear
+line
+echo -e "WHMCS Google Checkout Security Patch Update Script v1.0\nCreated by Myles McNamara (get@smyl.es) http://smyl.es\nLast Modified: $LASTMODIFIED"
+line
+
+ if [ "$#" -lt 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [[ $1 == -* ]]; then
+    echo "Usage: $0 [whmcs-path]" >&2
+    exit
+fi
+
+WHMCSPATH="$1"
+
+# Remove trailing slash if entered
+WHMCSPATH=${1%/}
+
+# Check if directory from user input exists
+if [ ! -d "$WHMCSPATH" ]; then
+        echo -e "\n$WHMCSPATH does NOT exist, are you sure you entered it correctly?\n"
+	exit
+fi
+
+enter
+
+# Download security patch
+line
+
+echo -e "\nAttempting to download $ZIPFILE from\n$ZIPFILEPATH ...\n"
+curl -o  "$WHMCSPATH/$ZIPFILE" "$ZIPFILEPATH" 
+
+line
+
+# Check if download succeded
+if [ ! -f "$WHMCSPATH/$ZIPFILE" ]; then
+        echo -e "\n$ZIPFILE did not download from \n$ZIPFILEPATH\ncheck the ZIPFILEPATH in the script"
+else
+	echo -e "\n$ZIPFILE download completed:\n$WHMCSPATH/$ZIPFILE\n"
+fi
+
+line
+
+enter
+
+# Extract specific files from zipfile and extract them to overwrite existing files
+unzip -j "$WHMCSPATH/$ZIPFILE" "whmcs/modules/gateways/callback/googlecheckout.php" -d "$WHMCSPATH/modules/gateways/callback"
+unzip -j "$WHMCSPATH/$ZIPFILE" "whmcs/dbconnect.php" -d "$WHMCSPATH"
+
+echo -e "\nPatch complete.  Thank you come again.\n"
+
