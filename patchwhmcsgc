@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # WHMCS 5.1 Google Checkout Module Patch
+# http://forum.whmcs.com/showthread.php?64778-Security-Advisory
 # This script will download and patch the Google Checkout module for WHMCS versions 5.1
 # Additional Features to come soon ...
 
 # Copyright (c) 2012 Myles McNamara <get@smyl.es>
-#  This script is licensed under GNU GPL version 3.0 or above
+# This script is licensed under GNU GPL version 3.0 or above
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
