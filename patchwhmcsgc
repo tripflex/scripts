@@ -83,5 +83,9 @@ enter
 unzip -j "$WHMCSPATH/$ZIPFILE" "whmcs/modules/gateways/callback/googlecheckout.php" -d "$WHMCSPATH/modules/gateways/callback"
 unzip -j "$WHMCSPATH/$ZIPFILE" "whmcs/dbconnect.php" -d "$WHMCSPATH"
 
+echo -e "\nFiles have been replaced, we will now remove the ZIP file...\n"
+
+rm -rf "$WHMCSPATH/$ZIPFILE"
+
 echo -e "\nPatch complete.  Thank you come again.\n"
 
