@@ -1,13 +1,13 @@
 #!/bin/sh
 #
 # @title Check iNode Usage
-# -----------------------------------
+# ------------------------------------------------------------------------------------------
 # @author Myles McNamara
 # @date 12/18/2012
 # @version 1.0
 # @source http://github.com/tripflex
-# @description This script will allow you to check the amount of inodes (files) in a given directory.
-# -----------------------------------------------
+# @description Check the amount of inodes (files) in a given directory.
+# ------------------------------------------------------------------------------------------
 # @usage ./checkinodeusage <path>
 # ------------------------------------------------------------------------------------------
 # @copyright Copyright (C) 2012  Myles McNamara
@@ -27,7 +27,7 @@
 # ------------------------------------------------------------------------------------------
 
 if [ "$#" -lt 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [[ $1 == -* ]]; then
- 	echo "Usage: $0 <details>" >&2
+ 	echo "Usage: $0 <path>" >&2
  	exit
 fi
 clear
