@@ -1,0 +1,31 @@
+#!/bin/bash
+# Remove Frontpage Extension for all accounts in cPanel server
+ 
+USERDIR='/var/cpanel/users'
+ 
+read -p "Are you sure you remove FP extension for all domains? <y/N> " prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+then
+ 
+u=`ls -l $USERDIR | egrep '^-' | wc -l`
+ 
+for (( i=1; i<=$u; i++ ))
+do
+        user=`ls -l $USERDIR | egrep '^-' | awk {'print $9'} | head -$i | tail -1`
+        echo "Checking user $user FrontPage status.."
+ 
+        if [ -d /home/$user/public_html/_vti_pvt ]; then
+                #domaincheck=`cat /home/$user/public_html/.htaccess | grep AuthName | awk {'print $2'}`
+                domain="cat $USERDIR/$user | grep 'DNS=' | sed 's/DNS=//'"
+                #domain="awk -F'DNS=' '{print $2}'"
+		echo "FrontPage found. Removing FrontPage for $domain"
+                /scripts/unsetupfp4 $domain
+        else
+                echo "FrontPage not found for $user"
+        fi
+done
+echo "Process completed"
+ 
+else
+  exit 0
+fi
