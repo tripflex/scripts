@@ -1,48 +1,59 @@
-    #!/bin/bash
-    # A Shell Script To Build vnstat software which is act as a console-based
-    # network traffic monitor without using 3rd party repo.
-    # -------------------------------------------------------------------------
-    # Tested under CentOS / RHEL / Fedora Linux only.
-    # -------------------------------------------------------------------------
-    # Copyright (c) 2008 nixCraft project <http://cyberciti.biz/fb/>
-    # This script is licensed under GNU GPL version 2.0 or above
-    # -------------------------------------------------------------------------
-    # This script is part of nixCraft shell script collection (NSSC)
-    # Visit http://bash.cyberciti.biz/ for more information.
-    # -------------------------------------------------------------------------
-    # Last updated on Mar/05/2010
-    # -------------------------------------------------------------------------
-    # Software Home page: http://humdi.net/vnstat/
-    # -------------------------------------------------------
-    VERSION="-1.10"
-    URL="http://humdi.net/vnstat/vnstat${VERSION}.tar.gz"
-    FILE="${URL##*/}"
-    DLHOME="/opt"
-    SOFTWARE="vnstat"
-    DEST="${FILE%.tar.gz}"
-    ETH="eth0"
-     
-    [[ "$2" != "" ]] && ETH="$2"
-     
-    [[ `id -u` -ne 0 ]] && { echo "$0: You must be root user to run this script. Run it as 'sudo $0'"; exit 1; }
-     
-    case "$1" in
-    download)
-    wget $URL -O "${DLHOME}/$FILE"
-    ;;
-    build)
-    echo "Building ${SOFTWARE}...."
-    [[ ! -f "${DLHOME}/$FILE" ]] && wget $URL -O "${DLHOME}/$FILE"
-    cd "${DLHOME}"
-    tar -zxvf $FILE
-    cd "$DEST"
-    make
-    make install
-    [[ ! -f /etc/cron.d/vnstat.cron ]] && /bin/cp -f example/vnstat.cron /etc/cron.d/vnstat
-    for i in $ETH
-    do
-    /usr/bin/vnstat -u -i "$i"
-    done
-    ;;
-    *) echo "Usage: $0 {download|build} [eth0|eth1|eth2|ppp0]"
-    esac
+#!/bin/sh
+# This script is part of nixCraft shell script collection (NSSC), visit http://bash.cyberciti.biz/ for more information.
+# @title installvnstat
+# ------------------------------------------------------------------------------------------
+# @author Myles McNamara
+# @date 05/20/2013
+# @version 1.11
+# @source http://gh.smyl.es/scripts/installvnstat
+# @description A Shell Script To Build vnstat software which is act as a console-based network traffic monitor without using 3rd party repo.
+# ------------------------------------------------------------------------------------------
+# @usage ./installvnstat
+# ------------------------------------------------------------------------------------------
+# @copyright Copyright (C) 2008 nixCraft project <http://cyberciti.biz/fb/>
+# @copyright Copyright (C) 2013  Myles McNamara
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------------------------
+VERSION="-1.11"
+URL="http://humdi.net/vnstat/vnstat${VERSION}.tar.gz"
+FILE="${URL##*/}"
+DLHOME="/opt"
+SOFTWARE="vnstat"
+DEST="${FILE%.tar.gz}"
+ETH="eth0"
+
+[[ "$2" != "" ]] && ETH="$2"
+
+[[ `id -u` -ne 0 ]] && { echo "$0: You must be root user to run this script. Run it as 'sudo $0'"; exit 1; }
+
+case "$1" in
+download)
+wget $URL -O "${DLHOME}/$FILE"
+;;
+build)
+echo "Building ${SOFTWARE}...."
+[[ ! -f "${DLHOME}/$FILE" ]] && wget $URL -O "${DLHOME}/$FILE"
+cd "${DLHOME}"
+tar -zxvf $FILE
+cd "$DEST"
+make
+make install
+[[ ! -f /etc/cron.d/vnstat.cron ]] && /bin/cp -f example/vnstat.cron /etc/cron.d/vnstat
+for i in $ETH
+do
+/usr/bin/vnstat -u -i "$i"
+done
+;;
+*) echo "Usage: $0 {download|build} [eth0|eth1|eth2|ppp0]"
+esac
