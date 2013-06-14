@@ -1,9 +1,43 @@
-Script Collection
-This is a collection of scripts I have collected over time.  
-They are an assortment of bash, shell, and expect scripts.  
-Some of them I found online, some I found on blogs, some I combined together to create one, and some I developed myself.
+#Scripts
+
+Preface
+-------
+This is a collection of scripts I have collected over time...from bash/shell, python, perl to php. Using cPanel frequently gave me the idea to put these together for easy deployment and management. Some of the code I wrote, some I changed, some I didn't even edit. Normally these are smaller scripts that don't need their own repo.
+
+***Use at your own risk.***
 
 If you're unsure how to use these you should leave this page now.
 
-These scripts can cause major damage to your system if used incorrectly, use at your own risk.
+Script | Usage
+--- | ---
+adddnszone | ./adddnszone example.com 8.8.8.8 [profile]
+addmysqldbanduser | ./addmysqldbanduser 'DB_Name' 'DB_USER' 'DB_PASSORD' ['remote'] ['DB_RIGHTS']
+checkdomainserialnumbers | ./checkdomainserialnumbers ns1 ns2 domain
+chmodwp | ./chmodwp /path/or/file
+cpremovefrontpage | ./cpremovefrontpage
+dumpnetworkinfo | ./dumpnetworkinfo
+geoip | ./geoip 'ip or url'
+getdatacenterinfo | ./getdatacenterinfo example.com example2.com ...
+getmemoryusage | python getmemoryusage
+installvnstat | ./installvnstat
+mysqloptimizefragmentedtables | ./mysqloptimizefragmentedtables
+patchwhmcsgc | ./patchwhmcsgc
 
+___
+
+### [checkdomainserialnumbers](https://github.com/tripflex/scripts/blob/master/checkdomainserialnumbers)
+This can be used to see if two different name servers have the same record or not.  DNS records are tracked by the serial number that is increased each time there is an update, which is based off the date.  The reason DNS servers would have different records is because of caching, this is an easy way to check.
+
+### [dumpnetworkinfo](https://github.com/tripflex/scripts/blob/master/dumpnetworkinfo)
+Running this script will automatically generate and output a file in the same directory with the syntax `network.D-M-Y.info.txt` .  This is normally a script I will use to diagnose network problems at a later time, or I send it to people to generate a report on their machine to troubleshoot remotely.
+
+### [getmemoryusage](https://github.com/tripflex/scripts/blob/master/getmemoryusage)
+This is a Python script that will output memory usage **Per Program** as a whole, which can be very useful when tracking down memory issues, leaks, etc.  It's also just a lot easier way to view on a program/script basis.
+
+### [mysqloptimizefragmentedtables](https://github.com/tripflex/scripts/blob/master/mysqloptimizefragmentedtables)
+[source](http://meinit.nl/optimize-only-fragmented-tables-mysql)
+
+This script is courtesy of [meinit.nl](http://meinit.nl), and it will run through every table in every database and ***check*** if the table is fragmented, and ***only*** optimize if needed.  Because tables are locked during optimization, you can't write to them.  This prevents optmization when it's not necessary.
+
+### [patchwhmcsgc](https://github.com/tripflex/scripts/blob/master/patchwhmcsgc)
+This was a script I wrote to patch WHMCS Google Checkout security vulnerability.  When you have a lot of servers, with a lot of customers using WHMCS...it can be very tedious updating them all.  Created a version that took list of servers to update, but simplified this one to allow users to run it on their own server when only needing to update one.
