@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This will copy permissions from one file/directory to another recursively
+# This will copy ownership from one file/directory to another recursively
 # If you are going to use 'cp -r /my/dir /new/dir' just use -p to retain permissions
 
 # usage
