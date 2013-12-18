@@ -24,6 +24,7 @@ getmemoryusage | python getmemoryusage
 installvnstat | ./installvnstat
 mysqloptimizefragmentedtables | ./mysqloptimizefragmentedtables
 patchwhmcsgc | ./patchwhmcsgc
+node-and-npm | ./node-and-npm
 
 ___
 
