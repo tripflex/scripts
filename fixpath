@@ -1,0 +1,121 @@
+#!/bin/sh
+clear
+OLDIFS=$IFS
+IFS=$'\n' 
+echo ""
+echo ""
+echo "============================"
+echo "HOST TORNADO FIX PATH SCRIPT"
+echo "Version 0.1b"
+echo "Created 5.14.2011"
+echo "Author: myles@hostt.net"
+echo "============================"
+echo ""
+echo ""
+echo "This script will allow you to search for any text or string in every file in a specified directory and replace it with the text or string of your choice.  This can be used to change any mysql 
+database configuration settings or any broken paths in any type of file.  Enter the string EXACTLY as you want it searched for and what you want that EXACT search term to be replaced with."
+echo ""
+echo "=========Basename==========="
+echo "The script you are running has basename `basename $0`, dirname `dirname $0`"
+echo ""
+echo "=====Working Directory======"
+echo "The present working directory is `pwd`"
+echo ""
+echo "Is this script running from the directory you want to scan? ('Y' for yes, 'N' for no)"
+STARTDIRECTORY=""
+read script
+	if [ "$script" = "y" ]; then
+	startdirectory="`pwd`"
+	elif [ "$script" = "n" ]; then
+	echo "Please enter the directory to start in"
+	read dirtemp
+		if [ "$dirtemp" = "" ]; then
+		echo "You must specify a directory to search in"
+		exit 1
+		fi
+	startdirectory=$dirtemp
+	else
+	echo "You must enter a (Y) or an (N) in order to proceed.  The script will now exit."
+	exit 1
+	fi
+if [ ! -d "$startdirectory" ]; then
+echo "Directory does not exist, script exiting!"
+exit 1
+fi
+echo ""
+echo "Work directory set as: $startdirectory"
+echo ""
+echo "What do you want search for? (If searching for a directory you must escape the /, IE \/home\/user\/public_html\/ is what you need to enter for /home/user/public_html"
+read -r searchterm
+echo ""
+echo "Search term set as:"
+echo $searchterm
+echo ""
+echo "What do you want to replace it with? (If replacing with a directory you must espace the /, IE \/home\/user2\/public_html\/ is what you would need to enter for /home/user2/public_html"
+read -r replaceterm
+echo ""
+echo "Replace term set as:"
+echo "$replaceterm"
+echo ""
+echo ""
+echo "=======================SEARCH RESULTS============================"
+        sr=0
+echo "" 
+	for file in $(grep -l -R $searchterm $startdirectory)
+         do
+        let sr=sr+1
+        done
+	echo "                          $sr total results found"
+echo ""
+echo "================================================================="
+echo ""
+echo "View all results? (Y) for yes and process (N) for no and exit."
+read process
+echo ""
+	if [ "$process" = "y" ]; then
+	clear
+        grep -l -R $searchterm $startdirectory
+	elif [ "$process" = "n" ]; then
+        echo "User cancel script processing, the script will now exit."
+        exit 1
+	else
+	echo "You must enter a (Y) or an (N) in order to proceed.  The script will now exit."
+        exit 1
+	fi
+echo ""
+echo "Press ENTER to continue"
+read tmp
+echo ""
+echo "================================================================="
+echo "To recap, we are going to search every file under this directory:"
+echo "$startdirectory"
+echo "We are going to search for:"
+echo "$searchterm"
+echo "And replace it with:"
+echo "$replaceterm"
+echo ""
+echo "WARNING: These changes will be permanent and immediate."
+echo "There will be a total of ($sr) replacements."
+echo "================================================================="
+echo ""
+echo ""
+echo "Continue with the script? (Y) for yes and process (N) for no and exit."
+read process
+	if [ "$process" = "y" ]; then
+         for file in $(grep -l -R $searchterm $startdirectory)
+         do
+           sed -e "s/$searchterm/$replaceterm/ig" $file > $file.tmp
+            mv $file.tmp $file
+                echo "Modified: " $file
+        done
+	echo "Done! The script has completed."
+	echo "Don't forget to CHOWN the files edited back to their 
+original owners!  Will be fixed in next update!"
+        elif [ "$process" = "n" ]; then
+        echo "User cancel script processing, the script will now exit."
+	exit 1
+        else
+	echo "You must enter a (Y) or an (N) in order to proceed.  The script will now exit."
+        exit 1
+	fi
+IFS=$OLDIFS
